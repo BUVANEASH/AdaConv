@@ -6,14 +6,14 @@ def init_weights(m):
         if m.weight.requires_grad:
             nn.init.xavier_normal_(m.weight)
         if m.bias is not None and m.bias.requires_grad:
-            nn.init.zeros_(m.bias)
+            nn.init.constant_(m.bias, 0.0)
     elif isinstance(m, nn.Linear):
         if m.weight.requires_grad:
             nn.init.xavier_normal_(m.weight)
         if m.bias is not None and m.bias.requires_grad:
-            nn.init.zeros_(m.bias)
+            nn.init.constant_(m.bias, 0.0)
     elif isinstance(m, nn.LayerNorm):
         if m.weight.requires_grad:
-            nn.init.ones_(m.weight)
+            nn.init.constant_(m.weight, 1.0)
         if m.bias is not None and m.bias.requires_grad:
-            nn.init.zeros_(m.bias)
+            nn.init.constant_(m.bias, 0.0)
