@@ -7,9 +7,8 @@ from dataloader import ImageDataset, InfiniteDataLoader, get_transform
 from hyperparam import Hyperparameter
 from loss import MomentMatchingStyleLoss, MSEContentLoss
 from model import StyleTransfer
-
 from torch.optim import Adam
-
+from torch.optim.lr_scheduler import OneCycleLR
 from torch.utils.tensorboard import SummaryWriter
 from torchvision.utils import make_grid
 
@@ -37,6 +36,11 @@ class Trainer:
 
         self.optimizer = Adam(
             self.model.parameters(), lr=self.hyper_param.learning_rate
+        )
+        self.scheduler = OneCycleLR(
+            self.optimizer,
+            max_lr=self.hyper_param.learning_rate,
+            total_steps=self.hyper_param.num_iteration,
         )
 
         self.step = 0
@@ -99,6 +103,7 @@ class Trainer:
                 "steps": self.step,
                 "model_state_dict": self.model.state_dict(),
                 "optimizer_state_dict": self.optimizer.state_dict(),
+                "scheduler_state_dict": self.scheduler.state_dict(),
             },
             ckpt_path,
         )
@@ -108,12 +113,14 @@ class Trainer:
         checkpoint = torch.load(ckpt_path)
         self.model.load_state_dict(checkpoint["model_state_dict"])
         self.optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+        self.scheduler.load_state_dict(checkpoint["scheduler_state_dict"])
         self.step = checkpoint["steps"]
         print(f"Loaded ckpts from {ckpt_path}")
 
     def optimizer_step(self):
         torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=10.0)
         self.optimizer.step()
+        self.scheduler.step()
 
     def train(self):
         tensorboard_dir = (
@@ -210,6 +217,7 @@ class Trainer:
                     old_ckpt.unlink(missing_ok=True)
 
             if self.step % self.hyper_param.log_step == 0:
+                self.writer.add_scalar("lr", self.scheduler.get_last_lr()[0], self.step)
                 print(
                     f"{datetime.datetime.now()} "
                     f"step {self.step}, "

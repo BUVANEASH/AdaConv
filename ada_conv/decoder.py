@@ -44,7 +44,7 @@ class DecoderBlock(nn.Module):
                 )
             )
             decoder_layers.append(
-                nn.LeakyReLU() if not last_layer or not final_block else nn.Sigmoid()
+                nn.ReLU() if not last_layer or not final_block else nn.Sigmoid()
             )
 
         if not final_block:

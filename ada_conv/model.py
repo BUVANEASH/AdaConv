@@ -41,7 +41,7 @@ class StyleTransfer(nn.Module):
         content_feats = self.encoder(content)
         style_feats = self.encoder(style)
         # global style encoder
-        w = self.global_style_encoder(content_feats[-1])
+        w = self.global_style_encoder(style_feats[-1])
         # decoder
         x = self.decoder(content_feats[-1], w)
 

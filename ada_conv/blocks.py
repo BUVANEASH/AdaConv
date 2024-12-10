@@ -149,16 +149,12 @@ class AdaConv2D(nn.Module):
         self.in_channels = in_channels
         self.out_channels = out_channels
 
-        self.spatial_conv = nn.Sequential(
-            nn.Conv2d(
-                in_channels=in_channels,
-                out_channels=out_channels,
-                kernel_size=3,
-                padding=1,
-                padding_mode="reflect",
-            ),
-            nn.LeakyReLU(),
-        )
+        self._epsilon = 1e-7
+
+    def _normalize(self, x: torch.Tensor) -> torch.Tensor:
+        mean = torch.mean(x, dim=[2, 3], keepdim=True)
+        std = torch.std(x, dim=[2, 3], keepdim=True) + self._epsilon
+        return (x - mean) / std
 
     def forward(
         self,
@@ -167,7 +163,7 @@ class AdaConv2D(nn.Module):
         pw_kernels: torch.Tensor,
         biases: torch.Tensor,
     ) -> torch.Tensor:
-        x = F.instance_norm(x)
+        x = self._normalize(x)
 
         out = []
         for i in range(x.shape[0]):
@@ -177,7 +173,6 @@ class AdaConv2D(nn.Module):
             out.append(y)
         out = torch.cat(out, dim=0)
 
-        out = self.spatial_conv(out)
         return out
 
     def _depthwise_separable_conv2D(

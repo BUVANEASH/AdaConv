@@ -5,7 +5,7 @@ import torch.nn.functional as F
 
 class MSEContentLoss(nn.Module):
     def forward(self, content, pred):
-        return F.mse_loss(content, pred)
+        return F.mse_loss(pred, content)
 
 
 class MomentMatchingStyleLoss(nn.Module):
@@ -15,9 +15,9 @@ class MomentMatchingStyleLoss(nn.Module):
             style_std, style_mean = torch.std_mean(style, dim=[2, 3])
             pred_std, pred_mean = torch.std_mean(pred, dim=[2, 3])
 
-            mean_loss = F.mse_loss(style_mean, pred_mean)
-            std_loss = F.mse_loss(style_std, pred_std)
+            mean_loss = F.mse_loss(pred_mean, style_mean)
+            std_loss = F.mse_loss(pred_std, style_std)
 
             losses.append(mean_loss + std_loss)
 
-        return sum(losses)
+        return sum(losses) / len(losses)
