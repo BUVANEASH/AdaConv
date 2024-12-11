@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 import torch
+import yaml
 from dataloader import ImageDataset, InfiniteDataLoader, get_transform
 from hyperparam import Hyperparameter
 from loss import MomentMatchingStyleLoss, MSEContentLoss
@@ -123,6 +124,10 @@ class Trainer:
         self.scheduler.step()
 
     def train(self):
+        Path(self.hyper_param.logdir).mkdir(parents=True, exist_ok=True)
+        with (Path(self.hyper_param.logdir) / "config.yaml").open("w") as outfile:
+            yaml.dump(self.hyper_param.model_dump(), outfile, default_flow_style=False)
+
         tensorboard_dir = (
             Path(self.hyper_param.logdir)
             / "tensorboard"
@@ -149,7 +154,7 @@ class Trainer:
         _zfill = len(str(self.hyper_param.num_iteration))
 
         self.model.train(True)
-        while self.step <= self.hyper_param.num_iteration:
+        while self.step < self.hyper_param.num_iteration:
             self.optimizer.zero_grad()
             train_contents = next(self.content_train_dataloader).to(self.device)
             train_styles = next(self.style_train_dataloader).to(self.device)
