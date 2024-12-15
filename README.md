@@ -5,7 +5,7 @@ A pytorch implementation of the [Adaptive Convolutions for Structure-Aware Style
 An Encoder-Decoder based style-transfer model with **`AdaConv`** at it's core to allow for the simultaneous transfer of both statistical and structural information from style images to content images.
 
 <p align="center">
-   <img src="https://ai2-s2-public.s3.amazonaws.com/figures/2017-08-08/d00bfacebef0cc5abae0cff1c552664a30179648/4-Figure2-1.png" alt="AdaConv architecture"/>
+   <img src="docs/images/AdaConv.png" alt="AdaConv architecture"/>
 </p>
 
 ## Dataset
