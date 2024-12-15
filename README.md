@@ -66,6 +66,18 @@ Basic inference testing on content and style image to create a matrix grid image
 
 	python test.py --config <trained config.yaml> --model_ckpt <model ckpt file path> --content_path <content image(s) path/dir> --style_path <style image(s) path/dir> --output_path <output image file path>
 
+### AdaConv Results (Lambda = 100.0)
+
+![AdaConv_Result_L100.0](docs/images/Lambda100_ckpt_160K.png)
+
+### Models
+---
+
+
+| Model | Image Size | Encoder | Lambda | # iter |
+| --- | --- | --- | --- | --- |
+| [ckpt](https://drive.google.com/file/d/1_oScLqB5ANNgvimowsHLhX5yFHUEGw-R/view?usp=sharing) | 256 x 256 | VGG19 |  100.0 | 160K |
+
 
 ## References
 
