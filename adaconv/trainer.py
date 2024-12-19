@@ -111,7 +111,7 @@ class Trainer:
         print(f"Saving ckpts to {ckpt_path} at {self.step}")
 
     def load_ckpts(self, ckpt_path):
-        checkpoint = torch.load(ckpt_path)
+        checkpoint = torch.load(ckpt_path, weights_only=True)
         self.model.load_state_dict(checkpoint["model_state_dict"])
         self.optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
         self.scheduler.load_state_dict(checkpoint["scheduler_state_dict"])
@@ -146,7 +146,9 @@ class Trainer:
 
         ckpt_dir = Path(self.hyper_param.logdir) / "ckpts"
         ckpt_dir.mkdir(parents=True, exist_ok=True)
-        ckpt_files = sorted(list(ckpt_dir.glob("*.pt")))
+        ckpt_files = sorted(list(ckpt_dir.glob("model_step_*.pt")))[
+            -self.hyper_param.max_ckpts :
+        ]
 
         last_ckpt = ckpt_dir / "last.pt"
         if last_ckpt.exists():

@@ -66,17 +66,29 @@ Basic inference testing on content and style image to create a matrix grid image
 
 	python test.py --config <trained config.yaml> --model_ckpt <model ckpt file path> --content_path <content image(s) path/dir> --style_path <style image(s) path/dir> --output_path <output image file path>
 
-### AdaConv Results (Lambda = 100.0)
+### Results
+---
+
+#### AdaConv Results (Style Weight = 100.0)
 
 ![AdaConv_Result_L100.0](docs/images/Lambda100_ckpt_160K.png)
 
-### Models
----
+#### AdaConv Results (Style Weight = 50.0)
+
+![AdaConv_Result_L100.0](docs/images/Lambda50_ckpt_160K.png)
 
 
-| Model | Image Size | Encoder | Lambda | # iter |
-| --- | --- | --- | --- | --- |
-| [ckpt](https://drive.google.com/file/d/1_oScLqB5ANNgvimowsHLhX5yFHUEGw-R/view?usp=sharing) | 256 x 256 | VGG19 |  100.0 | 160K |
+#### AdaConv Results (Style Weight = 10.0)
+
+![AdaConv_Result_L100.0](docs/images/Lambda10_ckpt_144K.png)
+
+#### Models
+
+| Model |  config | Image Size | Encoder | Lambda | # iter |
+| --- |  --- | --- | --- | --- | --- |
+| [ckpt](https://drive.google.com/file/d/1_oScLqB5ANNgvimowsHLhX5yFHUEGw-R/view?usp=sharing) | [config](https://drive.google.com/file/d/1QohTM8tHlYWewX8rAdVgs6BUDzz2Jqeg/view?usp=sharing) | 256 x 256 | VGG19 |  100.0 | 160K |
+| [ckpt](https://drive.google.com/file/d/1JofbTkw6TL72ENMtzjTjme2jglahu9HP/view?usp=sharing) | [config](https://drive.google.com/file/d/1jeQjwLGkbthsgUO2htZcggBuRHVI6Ei4/view?usp=sharing) | 256 x 256 | VGG19 |  50.0 | 160K |
+| [ckpt](https://drive.google.com/file/d/1WkVn0m2PKe3UYXhB4lHHbPi-kLht8nxm/view?usp=sharing) | [config](https://drive.google.com/file/d/17UA_gaNUC6CfZ76XVfolh19JLKqVIvwz/view?usp=sharing) | 256 x 256 | VGG19 |  10.0 | 144K |
 
 
 ## References
